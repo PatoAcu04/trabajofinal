@@ -5,11 +5,12 @@ import '../src/scss/styles.scss'
 import * as bootstrap from 'bootstrap'
 
 import Header from './Components/Header/Header'
-
+import Form from './Components/Form/Form'
 function App() {
   return (
     <>
       <Header />
+      <Form />
     </>
   )
 }
