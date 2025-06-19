@@ -4,9 +4,35 @@ import TableElement from './TableElement'
 import SearchFilter from './SearchFilter'
 import { renderToStaticMarkup } from 'react-dom/server';
 
+import { Users } from '../../App';
 
-function Table({users}) {
+function Table() {
     const [filter, setFilter] = useState("");
+    const [UsersActive, setActiveUsers] = useState(Users);
+
+    function RenderList()
+    {
+        const DisplayUsers = UsersActive.filter((user)=>
+        {
+            return user.id.toString().includes(filter.trim()) ||
+                    user.name.toLowerCase().includes(filter.toLowerCase().trim())
+        }).map((user)=>{
+            return <TableElement
+                key={user.id}
+                id={user.id}
+                name={user.name}
+                tel={user.tel}
+                mail={user.mail}
+                asistingClass={user.asistingClass}
+                hour={user.hour}
+                state={user.state}
+                Users={UsersActive}
+                setUsersFunction={setActiveUsers}/>
+        })
+
+        return DisplayUsers.length ? DisplayUsers : <tr><td colSpan="9" className='text-center text-danger fw-bold'>No se encontraron registros con ese filtro de búsqueda</td></tr>
+}
+
     return (
     <>
         <SearchFilter filterFunction={setFilter}/>
@@ -19,36 +45,22 @@ function Table({users}) {
                     <th scope='col'>Mail</th>
                     <th scope='col'>Clase</th>
                     <th scope='col'>Horario</th>
+                    <th scope='col'>Estado</th>
                     <th scope='col'></th>
                     <th scope='col'></th>
                 </tr>
             </thead>
             <tbody>
                 {
-                    users.length ? renderList(users, filter) : <p className='text-center'>No hay registros disponibles</p>
+                    UsersActive.length ? RenderList() : <tr><td colSpan="9" className='text-center text-danger fw-bold'>No hay registros disponibles</td></tr>
                 }
             </tbody>
         </table>
     </>
   )
 }
-function renderList(users, filterUsers)
-{
-    return users.map((user)=>{
-        if(user.id.toString().includes(filterUsers.toLowerCase().trim())
-            || user.name.toLowerCase().trim().includes(filterUsers.toLowerCase().trim()))
-        {
-        return <TableElement
-            key={user.id}
-            id={user.id}
-            name={user.name}
-            tel={user.tel}
-            mail={user.mail}
-            asistingClass={user.asistingClass}
-            hour={user.hour} />
-        }
-    })
-}
+
+
 
 
 export default Table

@@ -5,7 +5,7 @@ import '../src/scss/styles.scss'
 import * as bootstrap from 'bootstrap'
 
 import Header from './Components/Header/Header'
-<<<<<<< HEAD
+import Form from './Components/Form/Form'
 import Table from './Components/Table/Table'
 
 export let Users = [
@@ -15,6 +15,7 @@ export let Users = [
     tel: "381 631 1300",
     mail: "brahimsantiag04gmail.com",
     asistingClass: "Gimnasio",
+    state: "Activo",
     hour: "11:00"
   },
   {
@@ -23,6 +24,7 @@ export let Users = [
     tel: "381 111 2222",
     mail: "patoacu04@gmail.com",
     asistingClass: "Salsa y Bachata",
+    state: "Inactivo",
     hour: "19:00"
   },
   {
@@ -31,22 +33,18 @@ export let Users = [
     tel: "381 333 4444",
     mail: "valentinoqueiro@gmail.com",
     asistingClass: "Salsa y Bachata",
+    state: "Activo",
     hour: "20:00"
   }
 ]
 
-=======
-import Form from './Components/Form/Form'
->>>>>>> 6ac51e6af6ba9db9d8576c89c4d596e5aac609c5
+
 function App() {
   return (
     <>
       <Header />
-<<<<<<< HEAD
-      <Table users={Users}/>
-=======
       <Form />
->>>>>>> 6ac51e6af6ba9db9d8576c89c4d596e5aac609c5
+      <Table />
     </>
   )
 }
