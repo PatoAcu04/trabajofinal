@@ -2,17 +2,13 @@ import React from 'react'
 import { useState } from 'react';
 
 
-function SearchFilter({users, renderFunction, filterFunction}) {
+function SearchFilter({filterFunction}) {
     const [inputText, setInputText] = useState("");
     return (
-    <form className='d-flex justify-content-end' 
-    onSubmit={((e)=>{
-        e.preventDefault();
-        filterFunction(inputText);
-    })}>
+    <form className='d-flex justify-content-end'>
         <input type="text" placeholder='Buscar por Nombre o ID' className='m-2 p-1' onChange={
             ((e) => {
-                setInputText(e.target.value);
+                filterFunction(e.target.value);
             })}/>
         <button>
             <img src="#" alt="Buscar" />

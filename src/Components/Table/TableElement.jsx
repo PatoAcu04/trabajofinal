@@ -1,4 +1,5 @@
 import React from 'react'
+import { Users } from '../../App'
 
 function TableElement({id, name, tel, mail, asistingClass, hour}) {
   return (
@@ -10,10 +11,17 @@ function TableElement({id, name, tel, mail, asistingClass, hour}) {
         <td>{asistingClass}</td>
         <td>{hour}</td>
         <td>
-            <button className='bg-success text-bg-success border border-success-subtle rounded p-2'>Editar</button>
+            <button className='bg-success text-bg-success border border-success-subtle rounded p-2'>
+              Editar
+            </button>
         </td>
         <td>
-            <button className='bg-danger text-bg-danger border border-danger-subtle rounded p-2'>Eliminar</button>
+            <button className='bg-danger text-bg-danger border border-danger-subtle rounded p-2'
+            onClick={()=>{
+              
+            }}>
+              Eliminar
+            </button>
         </td>
     </tr>
   )

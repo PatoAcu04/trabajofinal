@@ -9,7 +9,7 @@ function Table({users}) {
     const [filter, setFilter] = useState("");
     return (
     <>
-        <SearchFilter users={users} renderFunction={renderList} filterFunction={setFilter}/>
+        <SearchFilter filterFunction={setFilter}/>
         <table className='table table-striped'>
             <thead>
                 <tr>
@@ -34,21 +34,21 @@ function Table({users}) {
 }
 function renderList(users, filterUsers)
 {
-        return users.map((user)=>{
-            console.log(results)
-            if(user.id.toString().includes(filterUsers.toLowerCase().trim()) || user.name.toLowerCase().trim().includes(filterUsers.toLowerCase().trim()))
-                {
-                return <TableElement
-                    key={user.id}
-                    id={user.id}
-                    name={user.name}
-                    tel={user.tel}
-                    mail={user.mail}
-                    asistingClass={user.asistingClass}
-                    hour={user.hour} />
-                }
-            })
-    }
+    return users.map((user)=>{
+        if(user.id.toString().includes(filterUsers.toLowerCase().trim())
+            || user.name.toLowerCase().trim().includes(filterUsers.toLowerCase().trim()))
+        {
+        return <TableElement
+            key={user.id}
+            id={user.id}
+            name={user.name}
+            tel={user.tel}
+            mail={user.mail}
+            asistingClass={user.asistingClass}
+            hour={user.hour} />
+        }
+    })
+}
 
 
 export default Table
