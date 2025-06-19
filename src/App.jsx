@@ -1,8 +1,7 @@
+import { useState } from 'react'
+
 // Import our custom CSS
 import '../src/scss/styles.scss'
-
-// Import all of Bootstrap’s JS
-import * as bootstrap from 'bootstrap'
 
 import Header from './Components/Header/Header'
 import Form from './Components/Form/Form'
@@ -38,13 +37,37 @@ export let Users = [
   }
 ]
 
+export const Classes = [
+  {
+    id: 1,
+    className: "Salsa y Bachata",
+    hours: ["09:30 - 11:00", "16:15 - 17:45", "20:00 - 21:30"]
+  },
+  {
+    id: 2,
+    className: "Gimnasio",
+    hours: ["08:15 - 09:45", "12:30 - 14:00", "18:00 - 19:30"]
+  },
+  {
+    id: 3,
+    className: "Zumba",
+    hours: ["10:00 - 11:30", "15:00 - 16:30", "19:45 - 21:15"]
+  },
+  {
+    id: 4,
+    className: "Pole Dance",
+    hours: ["09:00 - 10:30", "13:15 - 14:45", "17:30 - 19:00"]
+  },
+];
+
 
 function App() {
+  const [UsersActive, setActiveUsers] = useState(Users);
   return (
     <>
       <Header />
-      <Form />
-      <Table />
+      <Form UsersActive={UsersActive} setActiveUsers={setActiveUsers}/>
+      <Table UsersActive={UsersActive} setActiveUsers={setActiveUsers}/>
     </>
   )
 }

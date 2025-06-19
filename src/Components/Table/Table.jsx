@@ -2,13 +2,11 @@ import React, { use, useState } from 'react'
 
 import TableElement from './TableElement'
 import SearchFilter from './SearchFilter'
-import { renderToStaticMarkup } from 'react-dom/server';
 
-import { Users } from '../../App';
 
-function Table() {
+function Table({UsersActive, setActiveUsers}) {
     const [filter, setFilter] = useState("");
-    const [UsersActive, setActiveUsers] = useState(Users);
+
 
     function RenderList()
     {
