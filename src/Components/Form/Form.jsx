@@ -4,15 +4,16 @@ import FormInput from './FormInput'
 import FormClassSelect from './FormClassSelect'
 import FormHourSelect from './FormHourSelect'
 
-import { Classes } from '../../App'
+import { Classes, Users } from '../../App'
 
 
-function Form({UsersActive, setActiveUsers}) {
+function Form({UsersActive, setActiveUsers, isEditing, setEditing}) {
   const [name, setName] = useState("");
   const [tel, setTel] = useState("");
   const [email, setEmail] = useState("");
   const [selectedClass, setSelectedClass] = useState("");
   const [selectedHour, setSelectedHour] = useState("");
+
   
   const formDetails = [
     {
@@ -65,8 +66,31 @@ function Form({UsersActive, setActiveUsers}) {
     setEmail("");
     setSelectedClass("");
     setSelectedHour("");
+    setEditing(-1);
   }
   
+  function EditRegister()
+  {
+      const editUser = {
+        id: isEditing,
+        name: name,
+        tel: tel,
+        mail: email,
+        asistingClass: selectedClass,
+        state: "Activo",
+        hour: selectedHour
+      };
+
+      const updatedUsers = [...UsersActive];
+      
+      const index = updatedUsers.findIndex((user) => user.id == isEditing);
+
+      if (index !== -1) {
+        updatedUsers[index] = editUser;
+        setActiveUsers(updatedUsers);
+      }
+  }
+
   function SaveNewRegister()
   {
       const newUser = {
@@ -80,7 +104,6 @@ function Form({UsersActive, setActiveUsers}) {
       };
 
       setActiveUsers([...UsersActive, newUser]);
-      ResetForm();
   }
 
   return (
@@ -88,7 +111,15 @@ function Form({UsersActive, setActiveUsers}) {
     onSubmit={
       (e)=> {
         e.preventDefault();
-        SaveNewRegister();
+        if(isEditing != -1)
+        {
+          EditRegister();
+        }
+        else
+        {
+          SaveNewRegister();
+        }
+        ResetForm();
       }
     }>
       <div className='container d-flex flex-column justify-content-start align-items-stretch'>
@@ -109,7 +140,15 @@ function Form({UsersActive, setActiveUsers}) {
       <div className='container d-flex flex-column justify-content-start align-items-stretch'>
         <FormClassSelect Classes={Classes} selectedClass={selectedClass} HandleClassSelectChange={HandleClassSelectChange}/>
         <FormHourSelect Classes={Classes} selectedClass={selectedClass} HandleHourSelectChange={HandleHourSelectChange}/>
-        <button type="submit" className="btn btn-primary p-2 m-2">Agregar</button>
+        <button type="submit" className={isEditing != -1 ? "btn btn-success p-2 m-2" : "btn btn-primary p-2 m-2"}>{isEditing != -1 ? "Finalizar Edición" : "Agregar"}</button>
+        <button className={isEditing != -1 ? "btn btn-danger p-2 m-2" : "invisible"}
+        onClick={(e)=>
+        {
+          e.preventDefault();
+          ResetForm();
+        }
+        }
+        >Cancelar</button>
       </div>
     </form>
   )

@@ -4,7 +4,7 @@ import TableElement from './TableElement'
 import SearchFilter from './SearchFilter'
 
 
-function Table({UsersActive, setActiveUsers}) {
+function Table({UsersActive, setActiveUsers, setEditing}) {
     const [filter, setFilter] = useState("");
 
     const columns = [
@@ -36,7 +36,9 @@ function Table({UsersActive, setActiveUsers}) {
                 hour={user.hour}
                 state={user.state}
                 Users={UsersActive}
-                setUsersFunction={setActiveUsers}/>
+                setUsersFunction={setActiveUsers}
+                setEditing={setEditing}
+                />
         })
 
         return DisplayUsers.length ? DisplayUsers : <tr><td colSpan="9" className='text-center text-danger fw-bold'>No se encontraron registros con ese filtro de búsqueda</td></tr>

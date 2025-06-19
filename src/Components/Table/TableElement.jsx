@@ -1,6 +1,6 @@
 import React, { useState } from 'react'
 
-function TableElement({id, name, tel, mail, asistingClass, hour, state, setUsersFunction, Users}) {
+function TableElement({id, name, tel, mail, asistingClass, hour, state, setUsersFunction, Users, setEditing}) {
 
   const [deleteBtnText, setDeleteBtnText] = useState("Eliminar");
 
@@ -22,6 +22,11 @@ function TableElement({id, name, tel, mail, asistingClass, hour, state, setUsers
     }
   }
 
+  function HandleEdit()
+  {
+    setEditing(id);
+  }
+
 
   return (
     <tr className='align-center'>
@@ -33,13 +38,14 @@ function TableElement({id, name, tel, mail, asistingClass, hour, state, setUsers
         <td className='text-center'>{hour}</td>
         <td className={state == "Activo" ? "text-success fw-bold text-center" : "text-danger fw-bold text-center"}>{state}</td>
         <td className='text-center'>
-            <button id='btn-edit' className='bg-success text-bg-success border border-success-subtle rounded p-2'>
+            <button id='btn-edit' className='bg-success text-bg-success border border-success-subtle rounded p-2'
+            onClick={HandleEdit}>
               Editar
             </button>
         </td>
         <td className='text-center'>
             <button id='btn-delete' className='bg-danger text-bg-danger border border-danger-subtle rounded p-2'
-            onClick={ ()=> HandleDelete() }>
+            onClick={HandleDelete}>
               {deleteBtnText}
             </button>
         </td>

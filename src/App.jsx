@@ -63,11 +63,12 @@ export const Classes = [
 
 function App() {
   const [UsersActive, setActiveUsers] = useState(Users);
+  const [isEditing, setEditing] = useState(-1);
   return (
     <>
       <Header />
-      <Form UsersActive={UsersActive} setActiveUsers={setActiveUsers}/>
-      <Table UsersActive={UsersActive} setActiveUsers={setActiveUsers}/>
+      <Form UsersActive={UsersActive} setActiveUsers={setActiveUsers} isEditing={isEditing} setEditing={setEditing}/>
+      <Table UsersActive={UsersActive} setActiveUsers={setActiveUsers} setEditing={setEditing}/>
     </>
   )
 }
