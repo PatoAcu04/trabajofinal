@@ -24,20 +24,20 @@ function TableElement({id, name, tel, mail, asistingClass, hour, state, setUsers
 
 
   return (
-    <tr>
+    <tr className='align-center'>
         <th scope='row'>{id}</th>
-        <td>{name}</td>
-        <td>{tel}</td>
-        <td>{mail}</td>
-        <td>{asistingClass}</td>
-        <td>{hour}</td>
-        <td className={state == "Activo" ? "text-success fw-bold" : "text-danger fw-bold"}>{state}</td>
-        <td>
+        <td className='text-center'>{name}</td>
+        <td className='text-center'>{tel}</td>
+        <td className='text-center'>{mail}</td>
+        <td className='text-center'>{asistingClass}</td>
+        <td className='text-center'>{hour}</td>
+        <td className={state == "Activo" ? "text-success fw-bold text-center" : "text-danger fw-bold text-center"}>{state}</td>
+        <td className='text-center'>
             <button id='btn-edit' className='bg-success text-bg-success border border-success-subtle rounded p-2'>
               Editar
             </button>
         </td>
-        <td>
+        <td className='text-center'>
             <button id='btn-delete' className='bg-danger text-bg-danger border border-danger-subtle rounded p-2'
             onClick={ ()=> HandleDelete() }>
               {deleteBtnText}

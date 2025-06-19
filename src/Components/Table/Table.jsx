@@ -7,6 +7,17 @@ import SearchFilter from './SearchFilter'
 function Table({UsersActive, setActiveUsers}) {
     const [filter, setFilter] = useState("");
 
+    const columns = [
+        "#",
+        "Nombre y Apellido",
+        "Teléfono",
+        "Mail",
+        "Clase",
+        "Horario",
+        "Estado",
+        "",
+        ""
+    ]
 
     function RenderList()
     {
@@ -34,23 +45,18 @@ function Table({UsersActive, setActiveUsers}) {
     return (
     <>
         <SearchFilter filterFunction={setFilter}/>
-        <table className='table table-striped'>
+        <table className='table table-striped align-middle'>
             <thead>
-                <tr>
-                    <th scope='col'>#</th>
-                    <th scope='col'>Nombre y Apellido</th>
-                    <th scope='col'>Teléfono</th>
-                    <th scope='col'>Mail</th>
-                    <th scope='col'>Clase</th>
-                    <th scope='col'>Horario</th>
-                    <th scope='col'>Estado</th>
-                    <th scope='col'></th>
-                    <th scope='col'></th>
+                <tr className='align-center'>
+                    {columns.map((column, index)=>
+                    {
+                        return <th scope='col' className='text-center' key={index}>{column}</th>
+                    })}
                 </tr>
             </thead>
-            <tbody>
+            <tbody className="table-group-divider">
                 {
-                    UsersActive.length ? RenderList() : <tr><td colSpan="9" className='text-center text-danger fw-bold'>No hay registros disponibles</td></tr>
+                    UsersActive.length ? RenderList() : <tr className='align-center'><td colSpan="9" className='text-center text-danger fw-bold'>No hay registros disponibles</td></tr>
                 }
             </tbody>
         </table>

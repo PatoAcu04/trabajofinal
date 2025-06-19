@@ -11,9 +11,9 @@ function FormHourSelect({Classes, selectedClass, HandleHourSelectChange}) {
             {
                 Classes.find((actualClass)=>{
                     return actualClass.className == selectedClass;
-                })?.hours.map((hour)=>
+                })?.hours.map((hour, index)=>
                 {
-                    return <SelectOption key={hour} name={hour} />
+                    return <SelectOption key={index} name={hour} />
                 })
             }
         </select>
