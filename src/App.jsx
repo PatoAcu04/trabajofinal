@@ -5,6 +5,7 @@ import '../src/scss/styles.scss'
 import * as bootstrap from 'bootstrap'
 
 import Header from './Components/Header/Header'
+<<<<<<< HEAD
 import Table from './Components/Table/Table'
 
 export let Users = [
@@ -34,11 +35,18 @@ export let Users = [
   }
 ]
 
+=======
+import Form from './Components/Form/Form'
+>>>>>>> 6ac51e6af6ba9db9d8576c89c4d596e5aac609c5
 function App() {
   return (
     <>
       <Header />
+<<<<<<< HEAD
       <Table users={Users}/>
+=======
+      <Form />
+>>>>>>> 6ac51e6af6ba9db9d8576c89c4d596e5aac609c5
     </>
   )
 }
