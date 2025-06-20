@@ -16,7 +16,6 @@ function SearchFilter({filterFunction}) {
                 <img src={lupaImg} alt="Buscar" width="30" height="30" />
             </div>
         </form>
-    
   )
 }
 

@@ -6,6 +6,7 @@ import '../src/scss/styles.scss'
 import Header from './Components/Header/Header'
 import Form from './Components/Form/Form'
 import Table from './Components/Table/Table'
+import Footer from './Components/Footer/Footer'
 
 export let Users = [
   {
@@ -69,6 +70,7 @@ function App() {
       <Header />
       <Form UsersActive={UsersActive} setActiveUsers={setActiveUsers} isEditing={isEditing} setEditing={setEditing}/>
       <Table UsersActive={UsersActive} setActiveUsers={setActiveUsers} setEditing={setEditing}/>
+      <Footer />
     </>
   )
 }
