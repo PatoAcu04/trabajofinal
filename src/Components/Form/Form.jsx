@@ -94,7 +94,7 @@ function Form({UsersActive, setActiveUsers, isEditing, setEditing}) {
   function SaveNewRegister()
   {
       const newUser = {
-        id: UsersActive[UsersActive.length - 1].id + 1,
+        id: UsersActive.length ? UsersActive[UsersActive.length - 1].id + 1 : UsersActive.length + 1,
         name: name,
         tel: tel,
         mail: email,
