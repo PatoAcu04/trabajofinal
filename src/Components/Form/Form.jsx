@@ -22,7 +22,6 @@ function Form({UsersActive, setActiveUsers, isEditing, setEditing}) {
       inputId: "nameInput",
       inputType: "text",
       placeholder: "Ingresa tu nombre y apellido",
-      smallText: "Nunca compartiremos tu nombre.",
       state: name,
       stateFunction: setName
     },
@@ -31,8 +30,7 @@ function Form({UsersActive, setActiveUsers, isEditing, setEditing}) {
       labelText: "Número de Teléfono",
       inputId: "telInput",
       inputType: "number",
-      placeholder: "Ingresa tu número de teléfono",
-      smallText: "Nunca compartiremos tu número telefónico.",
+      placeholder: "Ingresa tu número de teléfono (con código de área)",
       state: tel,
       stateFunction: setTel
     },
@@ -42,7 +40,6 @@ function Form({UsersActive, setActiveUsers, isEditing, setEditing}) {
       inputId: "emailInput",
       inputType: "email",
       placeholder: "Ingresa tu email",
-      smallText: "Nunca compartiremos tu email.",
       state: email,
       stateFunction: setEmail
     },
@@ -71,29 +68,29 @@ function Form({UsersActive, setActiveUsers, isEditing, setEditing}) {
   
   function EditRegister()
   {
-      const editUser = {
-        id: isEditing,
-        name: name,
-        tel: tel,
-        mail: email,
-        asistingClass: selectedClass,
-        state: "Activo",
-        hour: selectedHour
-      };
+    const editUser = {
+    id: isEditing,
+    name: name,
+    tel: tel,
+    mail: email,
+    asistingClass: selectedClass,
+    state: "Activo",
+    hour: selectedHour
+    };
 
-      const updatedUsers = [...UsersActive];
-      
-      const index = updatedUsers.findIndex((user) => user.id == isEditing);
+    const updatedUsers = [...UsersActive];
+        
+    const index = updatedUsers.findIndex((user) => user.id == isEditing);
 
-      if (index !== -1) {
-        updatedUsers[index] = editUser;
-        setActiveUsers(updatedUsers);
-      }
+    if (index !== -1) {
+      updatedUsers[index] = editUser;
+      setActiveUsers(updatedUsers);
+    }
   }
 
   function SaveNewRegister()
   {
-      const newUser = {
+        const newUser = {
         id: UsersActive.length ? UsersActive[UsersActive.length - 1].id + 1 : UsersActive.length + 1,
         name: name,
         tel: tel,
@@ -106,23 +103,82 @@ function Form({UsersActive, setActiveUsers, isEditing, setEditing}) {
       setActiveUsers([...UsersActive, newUser]);
   }
 
+  
+  function isEmpty(text)
+  {
+    return !text.length
+  }
+
+  function textOnly(text)
+  {
+    return !(/[^a-zA-Z\s]/.test(text));
+  }
+
+  function validateName(text)
+  {
+    return !isEmpty(text) && textOnly(text);
+  }
+
+
+  function hasBlankSpaces(text)
+  {
+    return /\s/.test(text);
+  }
+
+  function numberOnly(text)
+  {
+    return !(/[^0-9]/.test(text));
+  }
+
+  function isLongerThan(text, minLength)
+  {
+    return text.length >= minLength;
+  }
+
+  function validateNumber(text)
+  {
+    return numberOnly(text) && isLongerThan(text, 10) && !hasBlankSpaces(text);
+  }
+
+
+
+  function includesMailChars(text)
+  {
+    return text.includes("@") && text.includes(".com");
+  }
+
+  function validateMail(text)
+  {
+    return includesMailChars(text) && !hasBlankSpaces(text);
+  }
+
+
+
+  function validateForm()
+  {
+    return validateName(name.trim()) && validateNumber(tel.trim()) && validateMail(email.trim()) && !isEmpty(selectedClass) && !isEmpty(selectedHour);
+  }
+  
   return (
     <form className='d-flex justify-content-center p-3 gap-3 m-2'
     onSubmit={
       (e)=> {
         e.preventDefault();
-        if(isEditing != -1)
+        if(validateForm())
         {
-          EditRegister();
+          if(isEditing != -1)
+          {
+            EditRegister();
+          }
+          else
+          {
+            SaveNewRegister();
+          }
+          ResetForm();
         }
-        else
-        {
-          SaveNewRegister();
-        }
-        ResetForm();
       }
     }>
-      <div className='container d-flex flex-column justify-content-start align-items-stretch'>
+      <div className='container d-flex flex-column justify-content-between align-items-stretch gap-3'>
       {formDetails.map((detail)=>
         {
           return <FormInput
@@ -131,21 +187,20 @@ function Form({UsersActive, setActiveUsers, isEditing, setEditing}) {
             inputId={detail.inputId}
             inputType={detail.inputType}
             placeholder={detail.placeholder}
-            smallText={detail.smallText}
             stateFunction={detail.stateFunction}
             state={detail.state}
           />
         })}
       </div>
-      <div className='container d-flex flex-column justify-content-start align-items-stretch'>
+      <div className='container d-flex flex-column justify-content-between align-items-stretch gap-3'>
         <FormClassSelect Classes={Classes} selectedClass={selectedClass} HandleClassSelectChange={HandleClassSelectChange}/>
         <FormHourSelect Classes={Classes} selectedClass={selectedClass} HandleHourSelectChange={HandleHourSelectChange}/>
-        <button type="submit" className={isEditing != -1 ? "btn btn-success p-2 m-2" : "btn btn-primary p-2 m-2"}>{isEditing != -1 ? "Finalizar Edición" : "Agregar"}</button>
+        <button type="submit" className={isEditing != -1 ? "btn btn-success p-2 m-2" : "btn btn-primary p-2 m-2"} disabled={!validateForm()}>{isEditing != -1 ? "Finalizar Edición" : "Agregar"}</button>
         <button className={isEditing != -1 ? "btn btn-danger p-2 m-2" : "invisible"}
         onClick={(e)=>
         {
           e.preventDefault();
-          ResetForm();
+          setEditing(-1);
         }
         }
         >Cancelar</button>
