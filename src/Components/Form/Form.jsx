@@ -134,7 +134,7 @@ function Form({UsersActive, setActiveUsers, isEditing, setEditing, Classes}) {
 
   function textOnly(text)
   {
-    return !(/[^a-zA-Z\s]/.test(text));
+    return !(/[^a-zA-ZñÑ ]/.test(text));
   }
 
   function validateName(text)
