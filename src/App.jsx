@@ -1,39 +1,55 @@
-import { useState, useEffect } from 'react'
+import { useState, useEffect } from "react";
 
 // Import our custom CSS
-import '../src/scss/styles.scss'
+import "../src/scss/styles.scss";
 
-import Header from './Components/Header/Header'
-import Form from './Components/Form/Form'
-import Table from './Components/Table/Table'
-import Footer from './Components/Footer/Footer'
-
-
-
+import Header from "./Components/Header/Header";
+import Form from "./Components/Form/Form";
+import Table from "./Components/Table/Table";
+import Footer from "./Components/Footer/Footer";
 
 function App() {
   const [users, setUsers] = useState("");
   const [classes, setClasses] = useState("");
   const [isEditing, setEditing] = useState(-1);
+  const [usersDBError, setUsersDBError] = useState("");
+  const [classDBError, setClassDBError] = useState("");
 
   useEffect(() => {
     fetch("http://localhost:3001/Users")
-      .then(res => res.json())
-      .then(data => setUsers(data));
+      .then((res) => res.json())
+      .then((data) => setUsers(data))
+      .catch((err) => {
+        console.log("ERROR: " + err);
+        setUsersDBError(err);
+      });
 
     fetch("http://localhost:3001/Classes")
-      .then(res => res.json())
-      .then((data) => setClasses(data));
+      .then((res) => res.json())
+      .then((data) => setClasses(data))
+      .catch((err) => setClassDBError(err));
   }, []);
 
   return (
     <>
       <Header />
-      <Form UsersActive={users} setActiveUsers={setUsers} isEditing={isEditing} setEditing={setEditing} Classes={classes}/>
-      <Table UsersActive={users} setActiveUsers={setUsers} setEditing={setEditing}/>
+      <Form
+        UsersActive={users}
+        setActiveUsers={setUsers}
+        isEditing={isEditing}
+        setEditing={setEditing}
+        Classes={classes}
+        classDBError={classDBError}
+      />
+      <Table
+        UsersActive={users}
+        setActiveUsers={setUsers}
+        setEditing={setEditing}
+        usersDBError={usersDBError}
+      />
       <Footer />
     </>
-  )
+  );
 }
 
-export default App
+export default App;

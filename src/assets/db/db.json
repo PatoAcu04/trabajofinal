@@ -26,6 +26,15 @@
     "asistingClass": "Salsa y Bachata",
     "state": "Activo",
     "hour": "09:30 - 11:00"
+  },
+  {
+    "id": 4,
+    "name": "Mariano Luna",
+    "tel": "3814445555",
+    "mail": "lunoides@gmail.com",
+    "asistingClass": "Pole Dance",
+    "state": "Activo",
+    "hour": "17:30 - 19:00"
   }
 ],
 "Classes": [
