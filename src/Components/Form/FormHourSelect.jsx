@@ -3,7 +3,7 @@ import { useState } from 'react';
 
 import SelectOption from './SelectOption';
 
-function FormHourSelect({Classes, selectedClass, HandleHourSelectChange}) {
+function FormHourSelect({Classes, selectedClass, HandleHourSelectChange, selectedHour}) {
 
   const [errorMsg, setError] = useState("");
 
@@ -28,7 +28,7 @@ function FormHourSelect({Classes, selectedClass, HandleHourSelectChange}) {
   return (
     <div className="form-group">
         <label htmlFor="hourSelect" className='fw-bold'>Horario</label>
-        <select className="form-select" aria-label="Default select example" id="hourSelect" name="HourSelect" disabled={selectedClass == ""} onChange={handleSelect} required>
+        <select className="form-select" aria-label="Default select example" id="hourSelect" name="HourSelect" disabled={selectedClass == ""} value={selectedHour} onChange={handleSelect} required>
             <option defaultValue value="">Selecciona el Horario</option>
             {
                 Classes.find((actualClass)=>{

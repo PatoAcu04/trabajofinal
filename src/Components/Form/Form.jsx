@@ -1,18 +1,35 @@
-import React, { useState } from 'react'
+import React, { useEffect, useState } from 'react'
 
 import FormInput from './FormInput'
 import FormClassSelect from './FormClassSelect'
 import FormHourSelect from './FormHourSelect'
 
-import { Classes, Users } from '../../App'
 
 
-function Form({UsersActive, setActiveUsers, isEditing, setEditing}) {
+function Form({UsersActive, setActiveUsers, isEditing, setEditing, Classes}) {
+
   const [name, setName] = useState("");
   const [tel, setTel] = useState("");
   const [email, setEmail] = useState("");
   const [selectedClass, setSelectedClass] = useState("");
   const [selectedHour, setSelectedHour] = useState("");
+
+
+
+  useEffect(()=>
+  {
+    const updatedUsers = [...UsersActive];
+    const index = updatedUsers.findIndex((user) => user.id == isEditing);
+    
+    if (index !== -1) {
+      const user = updatedUsers[index];
+      setName(user.name || "");
+      setTel(user.tel || "");
+      setEmail(user.mail || "");
+      setSelectedClass(user.asistingClass || "");
+      setSelectedHour(user.hour || "");
+    }
+  }, [isEditing])
 
   
   const formDetails = [
@@ -23,7 +40,8 @@ function Form({UsersActive, setActiveUsers, isEditing, setEditing}) {
       inputType: "text",
       placeholder: "Ingresa tu nombre y apellido",
       state: name,
-      stateFunction: setName
+      stateFunction: setName,
+      errorFunction: displayErrorName
     },
     {
       id: 2,
@@ -32,7 +50,8 @@ function Form({UsersActive, setActiveUsers, isEditing, setEditing}) {
       inputType: "number",
       placeholder: "Ingresa tu número de teléfono (con código de área)",
       state: tel,
-      stateFunction: setTel
+      stateFunction: setTel,
+      errorFunction: displayErrorNumber
     },
     {
       id: 3,
@@ -41,7 +60,8 @@ function Form({UsersActive, setActiveUsers, isEditing, setEditing}) {
       inputType: "email",
       placeholder: "Ingresa tu email",
       state: email,
-      stateFunction: setEmail
+      stateFunction: setEmail,
+      errorFunction: displayErrorEmail
     },
   ]
 
@@ -79,19 +99,22 @@ function Form({UsersActive, setActiveUsers, isEditing, setEditing}) {
     };
 
     const updatedUsers = [...UsersActive];
-        
     const index = updatedUsers.findIndex((user) => user.id == isEditing);
 
     if (index !== -1) {
       updatedUsers[index] = editUser;
       setActiveUsers(updatedUsers);
     }
+    else
+    {
+      alert("No se encontró al usuario");
+    }
   }
 
   function SaveNewRegister()
   {
         const newUser = {
-        id: UsersActive.length ? UsersActive[UsersActive.length - 1].id + 1 : UsersActive.length + 1,
+        id: UsersActive.length ? parseInt(UsersActive[UsersActive.length - 1].id) + 1 : UsersActive.length + 1,
         name: name,
         tel: tel,
         mail: email,
@@ -130,17 +153,15 @@ function Form({UsersActive, setActiveUsers, isEditing, setEditing}) {
     return !(/[^0-9]/.test(text));
   }
 
-  function isLongerThan(text, minLength)
+  function isShorterThan(text, minLength)
   {
-    return text.length >= minLength;
+    return text.length < minLength;
   }
 
   function validateNumber(text)
   {
-    return numberOnly(text) && isLongerThan(text, 10) && !hasBlankSpaces(text);
+    return numberOnly(text) && !isShorterThan(text, 10) && !hasBlankSpaces(text);
   }
-
-
 
   function includesMailChars(text)
   {
@@ -156,9 +177,79 @@ function Form({UsersActive, setActiveUsers, isEditing, setEditing}) {
 
   function validateForm()
   {
-    return validateName(name.trim()) && validateNumber(tel.trim()) && validateMail(email.trim()) && !isEmpty(selectedClass) && !isEmpty(selectedHour);
+    return validateName((name || "").trim()) && validateNumber((tel || "").trim()) && validateMail((email || "").trim()) && !isEmpty(selectedClass) && !isEmpty(selectedHour);
   }
   
+
+    function displayNumberLengthError(text)
+    {
+      if(isShorterThan(text, 10))
+      {
+        return "El número telefónico debe tener 10 digitos";
+      }
+      else
+      {
+        return "";
+      }
+    }
+
+    function displayErrorName(text)
+    {
+      if(isEmpty(text))
+      {
+        return "El campo no puede estar vacio";
+      }
+      else if(!textOnly(text))
+      {
+        return "No puede contener números o caracteres especiales";
+      }
+      else
+      {
+        return "";
+      }
+    }
+
+    function displayErrorNumber(text)
+    {
+      if(isEmpty(text))
+      {
+        return "El campo no puede estar vacio";
+      }
+      else if(hasBlankSpaces(text))
+      {
+        return "El número no puede contener espacios en blanco";
+      }
+      else if(!numberOnly(text))
+      {
+        return "El número no puede contener caracteres alfanuméricos";
+      }
+      else
+      {
+        return displayNumberLengthError(text);
+      }
+    }
+
+    function displayErrorEmail(text)
+    {
+      if(isEmpty(text))
+      {
+        return "El campo no puede estar vacio";
+      }
+      else if(hasBlankSpaces(text))
+      {
+        return "El mail no puede contener espacios en blanco";
+      }
+      else if(!includesMailChars(text))
+      {
+        return "El texto debe contener una @ y un .com";
+      }
+      else
+      {
+        return "";
+      }
+    }
+
+
   return (
     <form className='d-flex justify-content-center p-3 gap-3 m-2'
     onSubmit={
@@ -178,7 +269,7 @@ function Form({UsersActive, setActiveUsers, isEditing, setEditing}) {
         }
       }
     }>
-      <div className='container d-flex flex-column justify-content-between align-items-stretch gap-3'>
+      <div className='container d-flex flex-column justify-content-start align-items-stretch gap-3'>
       {formDetails.map((detail)=>
         {
           return <FormInput
@@ -189,18 +280,19 @@ function Form({UsersActive, setActiveUsers, isEditing, setEditing}) {
             placeholder={detail.placeholder}
             stateFunction={detail.stateFunction}
             state={detail.state}
+            errorFunction={detail.errorFunction}
           />
         })}
       </div>
-      <div className='container d-flex flex-column justify-content-between align-items-stretch gap-3'>
-        <FormClassSelect Classes={Classes} selectedClass={selectedClass} HandleClassSelectChange={HandleClassSelectChange}/>
-        <FormHourSelect Classes={Classes} selectedClass={selectedClass} HandleHourSelectChange={HandleHourSelectChange}/>
+      <div className='container d-flex flex-column justify-content-start align-items-stretch gap-3'>
+        {Classes.length ? <FormClassSelect Classes={Classes} selectedClass={selectedClass} HandleClassSelectChange={HandleClassSelectChange}/> : <p className='text-danger text-center'>No se pueden mostrar las clases: Error en la base de datos</p>}
+        {Classes.length ? <FormHourSelect Classes={Classes} selectedClass={selectedClass} selectedHour={selectedHour} HandleHourSelectChange={HandleHourSelectChange}/> : <p className='text-danger text-center'>No se pueden mostrar los horarios: Error en la base de datos</p>}
         <button type="submit" className={isEditing != -1 ? "btn btn-success p-2 m-2" : "btn btn-primary p-2 m-2"} disabled={!validateForm()}>{isEditing != -1 ? "Finalizar Edición" : "Agregar"}</button>
         <button className={isEditing != -1 ? "btn btn-danger p-2 m-2" : "invisible"}
         onClick={(e)=>
         {
           e.preventDefault();
-          setEditing(-1);
+          ResetForm();
         }
         }
         >Cancelar</button>
