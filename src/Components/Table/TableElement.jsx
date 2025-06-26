@@ -26,10 +26,15 @@ function TableElement({
     })
       .then((res) => {
         if (!res.ok) throw new Error("No se pudo eliminar el usuario");
+      })
+      .then(() => {
+        fetchUsers();
         alert("Usuario eliminado con éxito");
       })
-      .then(() => fetchUsers())
-      .catch((err) => console.error("Error al eliminar: ", err));
+      .catch((err) => {
+        console.error("Error al eliminar: ", err);
+        alert("Error al eliminar el usuario");
+      });
   }
 
   function HandleEdit() {

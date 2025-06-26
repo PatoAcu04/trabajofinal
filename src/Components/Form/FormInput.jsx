@@ -33,7 +33,7 @@ function FormInput({
       />
       <small
         className={
-          errorMsg.length ? "form-text text-danger fw-bold d-inline" : "d-none"
+          errorMsg.length ? "form-text text-danger fw-bold" : "invisible"
         }
       >
         {errorMsg}
