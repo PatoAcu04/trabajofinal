@@ -1,9 +1,9 @@
-import React, { use, useState } from "react";
+import React, { useState } from "react";
 
 import TableElement from "./TableElement";
 import SearchFilter from "./SearchFilter";
 
-function Table({ UsersActive, setEditing, usersDBError, fetchUsers }) {
+function Table({ users, setEditing, usersDBError, fetchUsers }) {
   const [filter, setFilter] = useState("");
 
   const columns = [
@@ -18,28 +18,30 @@ function Table({ UsersActive, setEditing, usersDBError, fetchUsers }) {
     "",
   ];
 
-  function RenderList() {
-    const DisplayUsers = UsersActive.filter((user) => {
-      return (
-        user.id.toString().includes(filter.trim()) ||
-        user.name.toLowerCase().includes(filter.toLowerCase().trim())
-      );
-    }).map((user) => {
-      return (
-        <TableElement
-          key={user.id}
-          id={user.id}
-          name={user.name}
-          tel={user.tel}
-          mail={user.mail}
-          asistingClass={user.asistingClass}
-          hour={user.hour}
-          state={user.state}
-          setEditing={setEditing}
-          fetchUsers={fetchUsers}
-        />
-      );
-    });
+  function renderList() {
+    const DisplayUsers = users
+      .filter((user) => {
+        return (
+          user.id.toString().includes(filter.trim()) ||
+          user.name.toLowerCase().includes(filter.toLowerCase().trim())
+        );
+      })
+      .map((user) => {
+        return (
+          <TableElement
+            key={user.id}
+            id={user.id}
+            name={user.name}
+            tel={user.tel}
+            mail={user.mail}
+            asistingClass={user.asistingClass}
+            hour={user.hour}
+            state={user.state}
+            setEditing={setEditing}
+            fetchUsers={fetchUsers}
+          />
+        );
+      });
 
     return DisplayUsers.length ? (
       DisplayUsers
@@ -71,8 +73,8 @@ function Table({ UsersActive, setEditing, usersDBError, fetchUsers }) {
           </tr>
         </thead>
         <tbody className="table-group-divider">
-          {UsersActive.length && !usersDBError ? (
-            RenderList()
+          {users.length && !usersDBError ? (
+            renderList()
           ) : usersDBError ? (
             <tr className="align-center">
               <td

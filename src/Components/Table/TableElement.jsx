@@ -13,23 +13,23 @@ function TableElement({
 }) {
   const [deleteBtnText, setDeleteBtnText] = useState("Eliminar");
 
-  function ConfirmDelete() {
-    setDeleteBtnText("¿Confirmar?");
-    return deleteBtnText == "¿Confirmar?";
-  }
-
   function HandleDelete() {
-    if (ConfirmDelete()) {
-      fetch(`http://localhost:3001/Users/${id}`, {
-        method: "DELETE",
-      })
-        .then((res) => {
-          if (!res.ok) throw new Error("No se pudo eliminar el usuario");
-          alert("Usuario eliminado con éxito");
-        })
-        .then(() => fetchUsers())
-        .catch((err) => console.error("Error al eliminar: ", err));
+    if (deleteBtnText !== "¿Confirmar?") {
+      setDeleteBtnText("¿Confirmar?");
+      setTimeout(() => {
+        setDeleteBtnText("Eliminar");
+      }, 2000);
+      return;
     }
+    fetch(`http://localhost:3001/Users/${id}`, {
+      method: "DELETE",
+    })
+      .then((res) => {
+        if (!res.ok) throw new Error("No se pudo eliminar el usuario");
+        alert("Usuario eliminado con éxito");
+      })
+      .then(() => fetchUsers())
+      .catch((err) => console.error("Error al eliminar: ", err));
   }
 
   function HandleEdit() {
@@ -45,18 +45,16 @@ function TableElement({
       <td className="text-center">{asistingClass}</td>
       <td className="text-center">{hour}</td>
       <td
-        className={
-          state == "Activo"
-            ? "text-success fw-bold text-center"
-            : "text-danger fw-bold text-center"
-        }
+        className={`text-success fw-bold text-center ${
+          state == "Activo" ? "text-success" : "text-danger"
+        }`}
       >
         {state}
       </td>
       <td className="text-center">
         <button
           id="btn-edit"
-          className="bg-success text-bg-success border border-success-subtle rounded p-2"
+          className="btn btn-success btn p-2"
           onClick={HandleEdit}
         >
           Editar
@@ -65,7 +63,7 @@ function TableElement({
       <td className="text-center">
         <button
           id="btn-delete"
-          className="bg-danger text-bg-danger border border-danger-subtle rounded p-2"
+          className="btn btn-danger btn p-2"
           onClick={HandleDelete}
         >
           {deleteBtnText}

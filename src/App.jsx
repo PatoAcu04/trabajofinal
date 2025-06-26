@@ -9,8 +9,8 @@ import Table from "./Components/Table/Table";
 import Footer from "./Components/Footer/Footer";
 
 function App() {
-  const [users, setUsers] = useState("");
-  const [classes, setClasses] = useState("");
+  const [users, setUsers] = useState([]);
+  const [classes, setClasses] = useState([]);
   const [isEditing, setEditing] = useState(-1);
   const [usersDBError, setUsersDBError] = useState("");
   const [classDBError, setClassDBError] = useState("");
@@ -25,11 +25,15 @@ function App() {
       });
   }
 
-  useEffect(() => {
+  function fetchClass() {
     fetch("http://localhost:3001/Classes")
       .then((res) => res.json())
       .then((data) => setClasses(data))
       .catch((err) => setClassDBError(err));
+  }
+
+  useEffect(() => {
+    fetchClass();
     fetchUsers();
   }, []);
 
@@ -37,8 +41,7 @@ function App() {
     <>
       <Header />
       <Form
-        UsersActive={users}
-        setActiveUsers={setUsers}
+        users={users}
         isEditing={isEditing}
         setEditing={setEditing}
         Classes={classes}
@@ -46,8 +49,7 @@ function App() {
         fetchUsers={fetchUsers}
       />
       <Table
-        UsersActive={users}
-        setActiveUsers={setUsers}
+        users={users}
         setEditing={setEditing}
         usersDBError={usersDBError}
         fetchUsers={fetchUsers}

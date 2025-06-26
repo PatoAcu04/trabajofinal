@@ -32,9 +32,7 @@ function FormClassSelect({ Classes, HandleClassSelectChange, selectedClass }) {
         onChange={handleSelect}
         required
       >
-        <option defaultValue value="">
-          Selecciona la Clase
-        </option>
+        <option value="">Selecciona la Clase</option>
         {Classes.map((actualClass) => {
           return (
             <SelectOption key={actualClass.id} name={actualClass.className} />

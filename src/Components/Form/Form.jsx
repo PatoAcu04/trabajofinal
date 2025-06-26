@@ -5,7 +5,7 @@ import FormClassSelect from "./FormClassSelect";
 import FormHourSelect from "./FormHourSelect";
 
 function Form({
-  UsersActive,
+  users,
   isEditing,
   setEditing,
   Classes,
@@ -20,7 +20,6 @@ function Form({
   const [selectedHour, setSelectedHour] = useState("");
 
   useEffect(() => {
-    const users = [...UsersActive];
     const index = users.findIndex((user) => user.id == isEditing);
 
     if (index !== -1) {
@@ -96,7 +95,7 @@ function Form({
       hour: selectedHour,
     };
 
-    const index = UsersActive.findIndex((user) => user.id == isEditing);
+    const index = users.findIndex((user) => user.id == isEditing);
 
     if (index !== -1) {
       fetch(`http://localhost:3001/Users/${isEditing}`, {
@@ -124,9 +123,9 @@ function Form({
 
   function SaveNewRegister() {
     const newUser = {
-      id: UsersActive.length
-        ? (parseInt(UsersActive[UsersActive.length - 1].id) + 1).toString()
-        : (UsersActive.length + 1).toString(),
+      id: users.length
+        ? (parseInt(users[users.length - 1].id) + 1).toString()
+        : (users.length + 1).toString(),
       name: name,
       tel: tel,
       mail: email,
@@ -208,48 +207,33 @@ function Form({
   }
 
   // Telefono
-  function displayNumberLengthError(text) {
-    if (isShorterThan(text, 10)) {
-      return "El número telefónico debe tener 10 digitos";
-    } else {
-      return "";
-    }
-  }
-
   function displayErrorNumber(text) {
-    if (isEmpty(text)) {
-      return "El campo no puede estar vacio";
-    } else if (hasBlankSpaces(text)) {
+    if (isEmpty(text)) return "El campo no puede estar vacio";
+    if (hasBlankSpaces(text))
       return "El número no puede contener espacios en blanco";
-    } else if (!numberOnly(text)) {
+    if (!numberOnly(text))
       return "El número no puede contener caracteres alfanuméricos";
-    } else {
-      return displayNumberLengthError(text);
-    }
+    if (isShorterThan(text, 10))
+      return "El número debe tener al menos 10 dígitos";
+    return "";
   }
 
   // Nombre
   function displayErrorName(text) {
-    if (isEmpty(text)) {
-      return "El campo no puede estar vacio";
-    } else if (!textOnly(text)) {
+    if (isEmpty(text)) return "El campo no puede estar vacio";
+    if (!textOnly(text))
       return "No puede contener números o caracteres especiales";
-    } else {
-      return "";
-    }
+    return "";
   }
 
   // Mail
   function displayErrorEmail(text) {
-    if (isEmpty(text)) {
-      return "El campo no puede estar vacio";
-    } else if (hasBlankSpaces(text)) {
+    if (isEmpty(text)) return "El campo no puede estar vacio";
+    if (hasBlankSpaces(text))
       return "El mail no puede contener espacios en blanco";
-    } else if (!includesMailChars(text)) {
+    if (!includesMailChars(text))
       return "El texto debe contener una @ y un .com";
-    } else {
-      return "";
-    }
+    return "";
   }
 
   return (
@@ -317,16 +301,15 @@ function Form({
 
         <button
           type="submit"
-          className={
-            isEditing != -1
-              ? "btn btn-success p-2 m-2"
-              : "btn btn-primary p-2 m-2"
-          }
+          className={`btn p-2 m-2 ${
+            isEditing != -1 ? "btn-success" : "btn-primary"
+          }`}
           disabled={!validateForm()}
         >
           {isEditing != -1 ? "Finalizar Edición" : "Agregar"}
         </button>
         <button
+          type="button"
           className={isEditing != -1 ? "btn btn-danger p-2 m-2" : "invisible"}
           onClick={(e) => {
             e.preventDefault();

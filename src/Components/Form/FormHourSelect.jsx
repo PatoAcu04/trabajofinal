@@ -39,14 +39,12 @@ function FormHourSelect({
         onChange={handleSelect}
         required
       >
-        <option defaultValue value="">
-          Selecciona el Horario
-        </option>
-        {Classes.find((actualClass) => {
-          return actualClass.className == selectedClass;
-        })?.hours.map((hour, index) => {
-          return <SelectOption key={index} name={hour} />;
-        })}
+        <option value="">Selecciona el Horario</option>
+        {Classes.find(
+          (actualClass) => actualClass.className == selectedClass
+        )?.hours.map((hour, index) => (
+          <SelectOption key={index} name={hour} />
+        ))}
       </select>
       <small
         className={
