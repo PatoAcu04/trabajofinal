@@ -8,9 +8,8 @@ function TableElement({
   asistingClass,
   hour,
   state,
-  setUsersFunction,
-  Users,
   setEditing,
+  fetchUsers,
 }) {
   const [deleteBtnText, setDeleteBtnText] = useState("Eliminar");
 
@@ -21,10 +20,15 @@ function TableElement({
 
   function HandleDelete() {
     if (ConfirmDelete()) {
-      const newUsers = Users.filter((user) => {
-        return user.id != id;
-      });
-      setUsersFunction(newUsers);
+      fetch(`http://localhost:3001/Users/${id}`, {
+        method: "DELETE",
+      })
+        .then((res) => {
+          if (!res.ok) throw new Error("No se pudo eliminar el usuario");
+          alert("Usuario eliminado con éxito");
+        })
+        .then(() => fetchUsers())
+        .catch((err) => console.error("Error al eliminar: ", err));
     }
   }
 

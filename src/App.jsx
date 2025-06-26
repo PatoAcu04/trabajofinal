@@ -15,7 +15,7 @@ function App() {
   const [usersDBError, setUsersDBError] = useState("");
   const [classDBError, setClassDBError] = useState("");
 
-  useEffect(() => {
+  function fetchUsers() {
     fetch("http://localhost:3001/Users")
       .then((res) => res.json())
       .then((data) => setUsers(data))
@@ -23,11 +23,14 @@ function App() {
         console.log("ERROR: " + err);
         setUsersDBError(err);
       });
+  }
 
+  useEffect(() => {
     fetch("http://localhost:3001/Classes")
       .then((res) => res.json())
       .then((data) => setClasses(data))
       .catch((err) => setClassDBError(err));
+    fetchUsers();
   }, []);
 
   return (
@@ -40,12 +43,14 @@ function App() {
         setEditing={setEditing}
         Classes={classes}
         classDBError={classDBError}
+        fetchUsers={fetchUsers}
       />
       <Table
         UsersActive={users}
         setActiveUsers={setUsers}
         setEditing={setEditing}
         usersDBError={usersDBError}
+        fetchUsers={fetchUsers}
       />
       <Footer />
     </>

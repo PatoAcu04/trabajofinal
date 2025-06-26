@@ -6,11 +6,11 @@ import FormHourSelect from "./FormHourSelect";
 
 function Form({
   UsersActive,
-  setActiveUsers,
   isEditing,
   setEditing,
   Classes,
   classDBError,
+  fetchUsers,
 }) {
   // Estados de los campos del form
   const [name, setName] = useState("");
@@ -20,11 +20,11 @@ function Form({
   const [selectedHour, setSelectedHour] = useState("");
 
   useEffect(() => {
-    const updatedUsers = [...UsersActive];
-    const index = updatedUsers.findIndex((user) => user.id == isEditing);
+    const users = [...UsersActive];
+    const index = users.findIndex((user) => user.id == isEditing);
 
     if (index !== -1) {
-      const user = updatedUsers[index];
+      const user = users[index];
       setName(user.name || "");
       setTel(user.tel || "");
       setEmail(user.mail || "");
@@ -96,12 +96,27 @@ function Form({
       hour: selectedHour,
     };
 
-    const updatedUsers = [...UsersActive];
-    const index = updatedUsers.findIndex((user) => user.id == isEditing);
+    const index = UsersActive.findIndex((user) => user.id == isEditing);
 
     if (index !== -1) {
-      updatedUsers[index] = editUser;
-      setActiveUsers(updatedUsers);
+      fetch(`http://localhost:3001/Users/${isEditing}`, {
+        method: "PUT",
+        headers: {
+          "Content-Type": "application/json",
+        },
+        body: JSON.stringify(editUser),
+      })
+        .then((res) => {
+          if (!res.ok) throw new Error("No se pudo editar el usuario");
+        })
+        .then(() => {
+          alert("Usuario editado con éxito");
+          fetchUsers();
+        })
+        .catch((err) => {
+          console.log("Error al editar el usuario ", err);
+          alert("Error al editar el usuario");
+        });
     } else {
       alert("No se encontró al usuario");
     }
@@ -110,8 +125,8 @@ function Form({
   function SaveNewRegister() {
     const newUser = {
       id: UsersActive.length
-        ? parseInt(UsersActive[UsersActive.length - 1].id) + 1
-        : UsersActive.length + 1,
+        ? (parseInt(UsersActive[UsersActive.length - 1].id) + 1).toString()
+        : (UsersActive.length + 1).toString(),
       name: name,
       tel: tel,
       mail: email,
@@ -120,7 +135,24 @@ function Form({
       hour: selectedHour,
     };
 
-    setActiveUsers([...UsersActive, newUser]);
+    fetch("http://localhost:3001/Users", {
+      method: "POST",
+      headers: {
+        "Content-Type": "application/json",
+      },
+      body: JSON.stringify(newUser),
+    })
+      .then((res) => {
+        if (!res.ok) throw new Error("No se pudo agregar el usuario");
+      })
+      .then(() => {
+        alert("Usuario agregado con éxito");
+        fetchUsers();
+      })
+      .catch((err) => {
+        console.log("Error ", err.message);
+        alert("Error al agregar el usuario");
+      });
   }
 
   // ========= VALIDACIONES =========

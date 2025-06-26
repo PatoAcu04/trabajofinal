@@ -3,7 +3,7 @@ import React, { use, useState } from "react";
 import TableElement from "./TableElement";
 import SearchFilter from "./SearchFilter";
 
-function Table({ UsersActive, setActiveUsers, setEditing, usersDBError }) {
+function Table({ UsersActive, setEditing, usersDBError, fetchUsers }) {
   const [filter, setFilter] = useState("");
 
   const columns = [
@@ -35,9 +35,8 @@ function Table({ UsersActive, setActiveUsers, setEditing, usersDBError }) {
           asistingClass={user.asistingClass}
           hour={user.hour}
           state={user.state}
-          Users={UsersActive}
-          setUsersFunction={setActiveUsers}
           setEditing={setEditing}
+          fetchUsers={fetchUsers}
         />
       );
     });
@@ -46,7 +45,10 @@ function Table({ UsersActive, setActiveUsers, setEditing, usersDBError }) {
       DisplayUsers
     ) : (
       <tr>
-        <td colSpan="9" className="text-center text-danger fw-bold">
+        <td
+          colSpan={columns.length}
+          className="text-center text-danger fw-bold"
+        >
           No se encontraron registros con ese filtro de búsqueda
         </td>
       </tr>
@@ -73,14 +75,20 @@ function Table({ UsersActive, setActiveUsers, setEditing, usersDBError }) {
             RenderList()
           ) : usersDBError ? (
             <tr className="align-center">
-              <td colSpan="9" className="text-center text-danger fw-bold">
+              <td
+                colSpan={columns.length}
+                className="text-center text-danger fw-bold"
+              >
                 No se pueden mostrar los usuarios: Error en la base de datos -{" "}
                 {usersDBError?.message}
               </td>
             </tr>
           ) : (
             <tr className="align-center">
-              <td colSpan="9" className="text-center text-danger fw-bold">
+              <td
+                colSpan={columns.length}
+                className="text-center text-danger fw-bold"
+              >
                 No hay registros disponibles
               </td>
             </tr>
